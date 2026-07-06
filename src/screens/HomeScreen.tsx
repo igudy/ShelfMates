@@ -1,125 +1,117 @@
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
-import { Button, Card, Chip, TextInput } from "react-native-paper";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { completeOnboarding, setDisplayName } from "@/store/slices/appSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { completeOnboarding } from "@/store/slices/appSlice";
 
-const FEATURES = [
-  {
-    title: "Build your shelf",
-    description: "Catalog books you own, want, or are reading right now.",
-  },
-  {
-    title: "Find your mates",
-    description: "See what friends are reading and swap recommendations.",
-  },
-  {
-    title: "Lend & borrow",
-    description: "Track who has your copy and never lose a favorite again.",
-  },
-] as const;
+import BackgroundCircles from "../../assets/images/gradientname.svg";
+import RightHandWithBook from "../../assets/images/righthandwithbook.svg";
+import GetStartedIcon from "../../assets/images/getStartedicon.svg";
+
+type CategoryPillProps = {
+  label: string;
+  className: string;
+  textClassName: string;
+};
+
+function CategoryPill({ label, className, textClassName }: CategoryPillProps) {
+  return (
+    <View
+      className={`absolute rounded-full px-6 py-3 shadow-lg shadow-black/25 ${className}`}
+    >
+      <Text className={`font-satoshi-bold text-lg ${textClassName}`}>
+        {label}
+      </Text>
+    </View>
+  );
+}
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
-  const { displayName, hasOnboarded } = useAppSelector((state) => state.app);
 
   const handleGetStarted = () => {
-    if (displayName.trim()) {
-      dispatch(completeOnboarding());
-    }
+    dispatch(completeOnboarding());
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <StatusBar style="dark" />
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="px-5 pb-10 pt-6"
-        showsVerticalScrollIndicator={false}
-      >
-        <View className="mb-8">
-          <View className="self-start mb-4">
-            <Chip
-              mode="flat"
-              style={{ backgroundColor: "#D8F3DC" }}
-              textStyle={{ color: "#2D6A4F", fontWeight: "600" }}
-            >
-              Beta preview
-            </Chip>
-          </View>
-          <Text className="text-4xl font-bold text-foreground tracking-tight">
-            ShelfMates
+    <SafeAreaView className="flex-1 bg-hero" edges={["top", "bottom"]}>
+      <StatusBar style="light" />
+
+      {/* Hero composition */}
+      <View className="flex-1">
+        {/* Concentric backdrop circles, centred behind the books */}
+        <View className="absolute inset-x-0 top-6 items-center">
+          <BackgroundCircles width={360} height={360} />
+        </View>
+
+        {/* Right hand holding "Atomic Habits" */}
+        <View className="absolute right-[-24px] top-8">
+          <RightHandWithBook width={264} height={362} />
+        </View>
+
+        {/* Left hand holding "Thinking, Fast and Slow"
+            NOTE: assets/images/lefthandwithbook.svg exported as 0 bytes.
+            This cream placeholder keeps the composition intact — drop the
+            re-exported photo in and swap this View for <LeftHandWithBook />. */}
+        <View
+          className="absolute left-[-8px] top-[188px] h-[236px] w-[182px] items-center justify-center rounded-2xl bg-[#F4EFE6] px-4 shadow-xl shadow-black/30"
+          style={{ transform: [{ rotate: "-9deg" }] }}
+        >
+          <Text className="text-center font-instrument text-3xl leading-8 text-[#2A2A2A]">
+            Thinking,{"\n"}Fast and Slow
           </Text>
-          <Text className="mt-3 text-base leading-6 text-muted-foreground">
-            Your social bookshelf. Share what you read, discover what your
-            mates love, and keep lending simple.
+          <Text className="mt-6 font-instrument text-lg text-[#4A4A4A]">
+            Daniel Kahneman
           </Text>
         </View>
 
-        <View className="mb-6">
-          <Card mode="elevated" style={{ backgroundColor: "#FFFFFF" }}>
-            <Card.Content style={{ gap: 16 }}>
-              <Text className="text-lg font-semibold text-foreground">
-                {hasOnboarded ? `Welcome back, ${displayName}!` : "Get started"}
-              </Text>
-              <TextInput
-                mode="outlined"
-                label="Your display name"
-                placeholder="e.g. Alex"
-                value={displayName}
-                onChangeText={(value) => dispatch(setDisplayName(value))}
-                autoCapitalize="words"
-                autoCorrect={false}
-              />
-              <Button
-                mode="contained"
-                onPress={handleGetStarted}
-                disabled={!displayName.trim()}
-                contentStyle={{ paddingVertical: 6 }}
-              >
-                {hasOnboarded ? "Continue to your shelf" : "Create your shelf"}
-              </Button>
-            </Card.Content>
-          </Card>
-        </View>
+        {/* Scattered category pills */}
+        <CategoryPill
+          label="Sci-Fi"
+          className="left-[104px] top-11 z-20 bg-[#2E1065] rotate-[-9deg]"
+          textClassName="text-white"
+        />
+        <CategoryPill
+          label="History"
+          className="right-2 top-[128px] z-20 bg-[#6BB3F2] rotate-[5deg]"
+          textClassName="text-white"
+        />
+        <CategoryPill
+          label="Fiction"
+          className="left-[-4px] top-[196px] z-20 bg-[#E5533C] rotate-[-4deg]"
+          textClassName="text-white"
+        />
+        <CategoryPill
+          label="Biography"
+          className="left-[150px] top-[292px] z-20 bg-[#A0D858] rotate-[6deg]"
+          textClassName="text-[#1C1917]"
+        />
+        <CategoryPill
+          label="Design"
+          className="right-6 top-[372px] z-20 bg-[#F2B93E] rotate-[-4deg]"
+          textClassName="text-[#1C1917]"
+        />
+      </View>
 
-        <Text className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-          What you can do
+      {/* Headline + CTA */}
+      <View className="px-6 pb-2">
+        <Text className="font-instrument text-6xl leading-[64px] text-white">
+          Share Your Shelf, Expand Your World.
         </Text>
 
-        <View className="gap-3">
-          {FEATURES.map((feature) => (
-            <Card
-              key={feature.title}
-              mode="outlined"
-              style={{ backgroundColor: "#FFFFFF" }}
-            >
-              <Card.Content>
-                <Text className="text-base font-semibold text-foreground">
-                  {feature.title}
-                </Text>
-                <Text className="mt-1 text-sm leading-5 text-muted-foreground">
-                  {feature.description}
-                </Text>
-              </Card.Content>
-            </Card>
-          ))}
-        </View>
-
-        {hasOnboarded ? (
-          <View className="mt-8 rounded-2xl border border-border bg-muted p-5">
-            <Text className="text-sm font-medium text-shelf">
-              You are all set
-            </Text>
-            <Text className="mt-2 text-sm leading-5 text-muted-foreground">
-              Next up: add your first book, invite a mate, and start building
-              your shared reading circle.
-            </Text>
+        <Pressable
+          onPress={handleGetStarted}
+          className="mt-8 flex-row items-center justify-center rounded-full bg-[#EDEAE4] py-5 active:opacity-90"
+        >
+          <Text className="font-satoshi-bold text-xl text-[#1C1917]">
+            Get Started
+          </Text>
+          <View className="ml-3">
+            <GetStartedIcon width={30} height={19} />
           </View>
-        ) : null}
-      </ScrollView>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }

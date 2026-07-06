@@ -4,7 +4,19 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        // Instrument Serif — used for the large editorial headline
+        instrument: ["InstrumentSerif-Regular"],
+        "instrument-italic": ["InstrumentSerif-Italic"],
+        // Satoshi — UI / labels / buttons
+        satoshi: ["Satoshi-Regular"],
+        "satoshi-medium": ["Satoshi-Medium"],
+        "satoshi-bold": ["Satoshi-Bold"],
+        "satoshi-black": ["Satoshi-Black"],
+      },
       colors: {
+        // Onboarding / hero backdrop
+        hero: "#4B3FE4",
         background: "#FAF7F2",
         foreground: "#1C1917",
         border: "#E7E0D5",
