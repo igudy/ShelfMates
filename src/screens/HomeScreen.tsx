@@ -1,13 +1,17 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { useAppDispatch } from "@/store/hooks";
-import { completeOnboarding } from "@/store/slices/appSlice";
 
 import BackgroundCircles from "../../assets/images/gradientname.svg";
-import RightHandWithBook from "../../assets/images/righthandwithbook.svg";
 import GetStartedIcon from "../../assets/images/getStartedicon.svg";
+
+const leftHandImage = require("../../assets/images/rightHandImage.png");
+const rightHandImage = require("../../assets/images/leftHandImage.png");
+
+type HomeScreenProps = {
+  onGetStarted: () => void;
+};
 
 type CategoryPillProps = {
   label: string;
@@ -27,13 +31,7 @@ function CategoryPill({ label, className, textClassName }: CategoryPillProps) {
   );
 }
 
-export default function HomeScreen() {
-  const dispatch = useAppDispatch();
-
-  const handleGetStarted = () => {
-    dispatch(completeOnboarding());
-  };
-
+export default function HomeScreen({ onGetStarted }: HomeScreenProps) {
   return (
     <SafeAreaView className="flex-1 bg-hero" edges={["top", "bottom"]}>
       <StatusBar style="light" />
@@ -41,55 +39,52 @@ export default function HomeScreen() {
       {/* Hero composition */}
       <View className="flex-1">
         {/* Concentric backdrop circles, centred behind the books */}
-        <View className="absolute inset-x-0 top-6 items-center">
-          <BackgroundCircles width={360} height={360} />
+        <View className="absolute inset-x-0 top-2 items-center">
+          <BackgroundCircles width={420} height={420} />
+        </View>
+
+        {/* Left hand holding "Thinking, Fast and Slow" */}
+        <View className="absolute left-[-28px] top-[196px]">
+          <Image
+            source={leftHandImage}
+            style={{ width: 286, height: 518 }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Right hand holding "Atomic Habits" */}
-        <View className="absolute right-[-24px] top-8">
-          <RightHandWithBook width={264} height={362} />
-        </View>
-
-        {/* Left hand holding "Thinking, Fast and Slow"
-            NOTE: assets/images/lefthandwithbook.svg exported as 0 bytes.
-            This cream placeholder keeps the composition intact — drop the
-            re-exported photo in and swap this View for <LeftHandWithBook />. */}
-        <View
-          className="absolute left-[-8px] top-[188px] h-[236px] w-[182px] items-center justify-center rounded-2xl bg-[#F4EFE6] px-4 shadow-xl shadow-black/30"
-          style={{ transform: [{ rotate: "-9deg" }] }}
-        >
-          <Text className="text-center font-instrument text-3xl leading-8 text-[#2A2A2A]">
-            Thinking,{"\n"}Fast and Slow
-          </Text>
-          <Text className="mt-6 font-instrument text-lg text-[#4A4A4A]">
-            Daniel Kahneman
-          </Text>
+        <View className="absolute right-[-40px] top-3">
+          <Image
+            source={rightHandImage}
+            style={{ width: 352, height: 483 }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Scattered category pills */}
         <CategoryPill
           label="Sci-Fi"
-          className="left-[104px] top-11 z-20 bg-[#2E1065] rotate-[-9deg]"
+          className="left-[112px] top-9 z-20 bg-[#2E1065] rotate-[-9deg]"
           textClassName="text-white"
         />
         <CategoryPill
           label="History"
-          className="right-2 top-[128px] z-20 bg-[#6BB3F2] rotate-[5deg]"
+          className="right-1 top-[150px] z-20 bg-[#6BB3F2] rotate-[5deg]"
           textClassName="text-white"
         />
         <CategoryPill
           label="Fiction"
-          className="left-[-4px] top-[196px] z-20 bg-[#E5533C] rotate-[-4deg]"
+          className="left-[-6px] top-[228px] z-20 bg-[#E5533C] rotate-[-4deg]"
           textClassName="text-white"
         />
         <CategoryPill
           label="Biography"
-          className="left-[150px] top-[292px] z-20 bg-[#A0D858] rotate-[6deg]"
+          className="left-[150px] top-[352px] z-20 bg-[#A0D858] rotate-[6deg]"
           textClassName="text-[#1C1917]"
         />
         <CategoryPill
           label="Design"
-          className="right-6 top-[372px] z-20 bg-[#F2B93E] rotate-[-4deg]"
+          className="right-6 top-[432px] z-20 bg-[#F2B93E] rotate-[-4deg]"
           textClassName="text-[#1C1917]"
         />
       </View>
@@ -101,7 +96,7 @@ export default function HomeScreen() {
         </Text>
 
         <Pressable
-          onPress={handleGetStarted}
+          onPress={onGetStarted}
           className="mt-8 flex-row items-center justify-center rounded-full bg-[#EDEAE4] py-5 active:opacity-90"
         >
           <Text className="font-satoshi-bold text-xl text-[#1C1917]">

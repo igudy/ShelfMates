@@ -3,11 +3,13 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 export interface AppState {
   hasOnboarded: boolean;
   displayName: string;
+  shelfBookCount: number;
 }
 
 const initialState: AppState = {
   hasOnboarded: false,
   displayName: "",
+  shelfBookCount: 0,
 };
 
 const appSlice = createSlice({
@@ -20,9 +22,13 @@ const appSlice = createSlice({
     completeOnboarding: (state) => {
       state.hasOnboarded = true;
     },
+    addScannedBooks: (state, action: PayloadAction<number>) => {
+      state.shelfBookCount = Math.max(state.shelfBookCount, action.payload);
+    },
     resetApp: () => initialState,
   },
 });
 
-export const { setDisplayName, completeOnboarding, resetApp } = appSlice.actions;
+export const { setDisplayName, completeOnboarding, addScannedBooks, resetApp } =
+  appSlice.actions;
 export default appSlice.reducer;
