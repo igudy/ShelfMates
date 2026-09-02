@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import MapView, { Marker, type Region } from "react-native-maps";
 import { getMapProviderInfo } from "@/config/mapProvider";
-import { logMapError, logMapReady } from "@/debug/appDiagnostics";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BellIcon, SearchIcon } from "@/components/icons";
 import BookCover from "@/components/BookCover";
@@ -187,21 +186,8 @@ export default function NearbyScreen({
     };
   }, []);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!mapReadyRef.current) {
-        logMapError(
-          `${mapProviderInfo.label} did not finish loading within 8s. Check API key restrictions or use a dev build for Google Maps on iOS.`
-        );
-      }
-    }, 8000);
-
-    return () => clearTimeout(timeout);
-  }, [mapProviderInfo.label]);
-
   const handleMapReady = useCallback(() => {
     mapReadyRef.current = true;
-    logMapReady();
   }, []);
 
   const handleSearchSelect = (result: NearbySearchResult) => {

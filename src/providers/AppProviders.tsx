@@ -5,7 +5,6 @@ import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { store } from "@/store";
 import { shelfMatesTheme } from "@/theme";
-import { DebugOverlay } from "@/components/DebugOverlay";
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -18,7 +17,6 @@ export function AppProviders({ children }: AppProvidersProps) {
         <PaperProvider theme={shelfMatesTheme}>
           <View className="flex-1">
             {children}
-            <DebugOverlay />
           </View>
         </PaperProvider>
       </SafeAreaProvider>
