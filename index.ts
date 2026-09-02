@@ -1,9 +1,4 @@
 import { registerRootComponent } from "expo";
-import { installNetworkLogger } from "@/debug/networkLog";
-import { runAppDiagnostics } from "@/debug/appDiagnostics";
-
-installNetworkLogger();
-void runAppDiagnostics();
 
 import App from "./App";
 

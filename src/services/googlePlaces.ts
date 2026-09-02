@@ -1,5 +1,4 @@
 import { getGooglePlacesApiKey } from "@/config/google";
-import { addNetworkLog } from "@/debug/networkLog";
 
 export type PlacePrediction = {
   placeId: string;
@@ -49,16 +48,6 @@ export async function fetchPlacePredictions(
 
   const key = getGooglePlacesApiKey();
   if (!key) {
-    addNetworkLog({
-      id: `missing-key-${Date.now()}`,
-      method: "GET",
-      url: "places/autocomplete",
-      displayUrl: "places/autocomplete",
-      ok: false,
-      logStatus: "error",
-      error: "EXPO_PUBLIC_GOOGLE_PLACES_API is missing",
-      timestamp: Date.now(),
-    });
     return [];
   }
 
@@ -90,16 +79,6 @@ export async function fetchPlaceLocation(
 ): Promise<PlaceLocation | null> {
   const key = getGooglePlacesApiKey();
   if (!key) {
-    addNetworkLog({
-      id: `missing-key-${Date.now()}`,
-      method: "GET",
-      url: "places/details",
-      displayUrl: "places/details",
-      ok: false,
-      logStatus: "error",
-      error: "EXPO_PUBLIC_GOOGLE_PLACES_API is missing",
-      timestamp: Date.now(),
-    });
     return null;
   }
 
